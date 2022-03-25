@@ -1,19 +1,24 @@
 <template>
   <div class="app">
     <h1>Page with posts</h1>
-    <my-button
-      @click="showDialog"
-      style="margin: 15px 0"
-    >
-      Create post
-    </my-button>
+    <div class="app__btns">
+      <my-button
+        @click="showDialog"
+      >
+        Create post
+      </my-button>
+      <my-select
+        v-model="selectedSort"
+        :options="sortOptions"
+      />
+    </div>
     <my-dialog v-model:show="dialogVisible">
       <post-form
         @create="createPost"
       />
     </my-dialog>
     <post-list
-      :posts="posts"
+      :posts="sortedPosts"
       @remove="removePost"
       v-if="!isPostsLoading"
     />
@@ -25,19 +30,26 @@
 import PostForm from '@/components/PostForm'
 import PostList from '@/components/PostList'
 import MyDialog from '@/components/UI/MyDialog'
+import MySelect from '@/components/UI/MySelect'
 import axios from 'axios'
 export default {
   components: {
     MyDialog,
     PostForm,
-    PostList
+    PostList,
+    MySelect
   },
 
   data () {
     return {
       posts: [],
       dialogVisible: false,
-      isPostsLoading: false
+      isPostsLoading: false,
+      selectedSort: '',
+      sortOptions: [
+        { value: 'title', name: 'By name' },
+        { value: 'body', name: 'By description' }
+      ]
     }
   },
   methods: {
@@ -65,6 +77,13 @@ export default {
   },
   mounted () {
     this.fetchPosts()
+  },
+  computed: {
+    sortedPosts () {
+      return [...this.posts].sort((post1, post2) => {
+        return post1[this.selectedSort]?.localeCompare(post2[this.selectedSort])
+      })
+    }
   }
 }
 </script>
@@ -78,5 +97,9 @@ export default {
 .app {
   padding: 20px;
 }
-
+.app__btns {
+  margin: 15px 0;
+  display: flex;
+  justify-content: space-between;
+}
 </style>
