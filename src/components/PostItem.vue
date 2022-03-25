@@ -1,8 +1,9 @@
 <template>
   <div class="post">
     <div>
-      <div><strong>Title:</strong>{{post.title}}</div>
-      <div><strong>Opisanie:</strong>{{post.body}}</div>
+      <div><strong>Post id: </strong>{{post.id}}</div>
+      <div><strong>Title: </strong>{{post.title}}</div>
+      <div><strong>Text: </strong>{{post.body}}</div>
     </div>
     <div class="post__bts">
       <my-button
